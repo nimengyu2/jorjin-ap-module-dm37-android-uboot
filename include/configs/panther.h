@@ -37,7 +37,7 @@
 #define CONFIG_OMAP		1	/* in a TI OMAP core */
 #define CONFIG_OMAP34XX		1	/* which is a 34XX */
 #define CONFIG_OMAP3430		1	/* which is in a 3430 */
-#define CONFIG_PANTHER	1	/* working with PANTHER */
+#define CONFIG_OMAP3_PANTHER	1	/* working with PANTHER */
 
 #define CONFIG_SDRC	/* The chip has SDRC controller */
 
@@ -142,6 +142,10 @@
 #endif /* CONFIG_MUSB_UDC */
 
 #endif /* CONFIG_USB_OMAP3 */
+
+/* Enable Multi Bus support for I2C */
+#define CONFIG_I2C_MULTI_BUS           1
+
 /* commands to include */
 #include <config_cmd_default.h>
 
@@ -203,7 +207,7 @@
 							/* partition */
 
 /* Environment information */
-#define CONFIG_BOOTDELAY		10
+#define CONFIG_BOOTDELAY		3
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"loadaddr=0x82000000\0" \

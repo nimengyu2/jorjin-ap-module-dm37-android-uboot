@@ -27,6 +27,59 @@
 
 #define I2C_BUS_MAX	3
 
+// Jack_20111017: define i2c structure for i2c's multi-bus using
+#ifdef CONFIG_OMAP3_PANTHER
+struct i2c {
+	unsigned short rev;	/* 0x00 */
+	unsigned short res1;
+	unsigned short ie;	/* 0x04 */
+	unsigned short res2;
+	unsigned short stat;	/* 0x08 */
+	unsigned short res3;
+	unsigned short iv;	/* 0x0C */
+	unsigned short res4;
+	unsigned short syss;	/* 0x10 */
+	unsigned short res4a;
+	unsigned short buf;	/* 0x14 */
+	unsigned short res5;
+	unsigned short cnt;	/* 0x18 */
+	unsigned short res6;
+	unsigned short data;	/* 0x1C */
+	unsigned short res7;
+	unsigned short sysc;	/* 0x20 */
+	unsigned short res8;
+	unsigned short con;	/* 0x24 */
+	unsigned short res9;
+	unsigned short oa;	/* 0x28 */
+	unsigned short res10;
+	unsigned short sa;	/* 0x2C */
+	unsigned short res11;
+	unsigned short psc;	/* 0x30 */
+	unsigned short res12;
+	unsigned short scll;	/* 0x34 */
+	unsigned short res13;
+	unsigned short sclh;	/* 0x38 */
+	unsigned short res14;
+	unsigned short systest;	/* 0x3c */
+	unsigned short res15;
+};
+
+#define I2C_REV		(&i2c_base->rev)
+#define I2C_IE 		(&i2c_base->ie)
+#define I2C_STAT	(&i2c_base->stat)
+#define I2C_IV 		(&i2c_base->iv)
+#define I2C_BUF		(&i2c_base->buf)
+#define I2C_CNT		(&i2c_base->cnt)
+#define I2C_DATA	(&i2c_base->data)
+#define I2C_SYSC	(&i2c_base->sysc)
+#define I2C_CON		(&i2c_base->con)
+#define I2C_OA 		(&i2c_base->oa)
+#define I2C_SA 		(&i2c_base->sa)
+#define I2C_PSC		(&i2c_base->psc)
+#define I2C_SCLL	(&i2c_base->scll)
+#define I2C_SCLH	(&i2c_base->sclh)
+#define I2C_SYSTEST	(&i2c_base->systest)
+#else
 #define I2C_REV		(I2C_DEFAULT_BASE + 0x00)
 #define I2C_IE 		(I2C_DEFAULT_BASE + 0x04)
 #define I2C_STAT	(I2C_DEFAULT_BASE + 0x08)
@@ -42,6 +95,7 @@
 #define I2C_SCLL	(I2C_DEFAULT_BASE + 0x34)
 #define I2C_SCLH	(I2C_DEFAULT_BASE + 0x38)
 #define I2C_SYSTEST	(I2C_DEFAULT_BASE + 0x3c)
+#endif
 
 /* I2C masks */
 
