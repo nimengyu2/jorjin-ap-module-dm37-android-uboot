@@ -53,6 +53,15 @@
  * with OMAP34XX_CTRL_BASE to get the actual address
  */
 
+/*GPIOs*/
+#define CONTROL_PADCONF_GPIO_112                  0x0134
+#define CONTROL_PADCONF_GPIO_113                  0x0136
+#define CONTROL_PADCONF_GPIO_114                  0x0138
+#define CONTROL_PADCONF_GPIO_115                  0x013A
+#define CONTROL_PADCONF_GPIO_126                  0x0A54
+#define CONTROL_PADCONF_GPIO_127                  0x0A56
+#define CONTROL_PADCONF_GPIO_128                  0x0A58
+#define CONTROL_PADCONF_GPIO_129                  0x0A5A
 /*SDRC*/
 #define CONTROL_PADCONF_SDRC_D0		0x0030
 #define CONTROL_PADCONF_SDRC_D1		0x0032
