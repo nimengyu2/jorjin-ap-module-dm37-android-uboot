@@ -3179,6 +3179,9 @@ am3517_evm_config :	unconfig
 devkit8000_config :	unconfig
 	@$(MKCONFIG) $(@:_config=) arm arm_cortexa8 devkit8000 timll omap3
 
+panther_config :	unconfig
+	@$(MKCONFIG) $(@:_config=) arm arm_cortexa8 panther jorjin omap3
+
 omap3_beagle_config :	unconfig
 	@$(MKCONFIG) $(@:_config=) arm arm_cortexa8 beagle ti omap3
 
