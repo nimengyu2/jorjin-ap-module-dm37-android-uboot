@@ -99,7 +99,7 @@ u32 get_sdr_cs_offset(u32 cs)
 		return 0;
 
 	offset = readl(&sdrc_base->cs_cfg);
-	offset = (offset & 15) << 27 | (offset & 0x30) >> 17;
+	offset = (offset & 15) << 27 | (offset & 0x30) << 17;
 
 	return offset;
 }
@@ -183,6 +183,14 @@ int dram_init(void)
 	if ((sysinfo.mtype == DDR_COMBO) || (sysinfo.mtype == DDR_STACKED)) {
 		do_sdrc_init(CS1, NOT_EARLY);
 		make_cs1_contiguous();
+
+#ifdef CONFIG_OMAP3_PANTHER
+		// Jack_20110829: Force CS1 to have the same mcfg value as CS0
+		// Caution:
+		//	This is a temporary solution for the incorrect memory size issue of Pantherboard.
+		//	It has not been fully tested. If you have any problem in booting, please remove the following code.
+		writel(readl(&sdrc_base->cs[CS0].mcfg), &sdrc_base->cs[CS1].mcfg);
+#endif
 
 		size1 = get_sdr_cs_size(CS1);
 	}
