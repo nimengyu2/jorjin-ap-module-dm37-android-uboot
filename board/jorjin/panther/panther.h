@@ -169,19 +169,19 @@ const omap3_sysinfo sysinfo = {
 	MUX_VAL(CP(HSUSB0_DATA7),		(IEN  | PTD | DIS | M0)) /*HSUSB0_DATA7*/\
 	MUX_VAL(CP(I2C1_SCL),		(IEN  | PTU | EN  | M0)) /*I2C1_SCL*/\
 	MUX_VAL(CP(I2C1_SDA),		(IEN  | PTU | EN  | M0)) /*I2C1_SDA*/\
-	MUX_VAL(CP(I2C2_SCL),		(IEN  | PTU | EN  | M0)) /*GPIO_168*/\
-	MUX_VAL(CP(I2C2_SDA),		(IEN  | PTU | EN  | M0)) /*GPIO_183*/\
+	MUX_VAL(CP(I2C2_SCL),		(IEN  | PTU | EN  | M0)) /*I2C2_SCL*/\
+	MUX_VAL(CP(I2C2_SDA),		(IEN  | PTU | EN  | M0)) /*I2C2_SDA*/\
 	MUX_VAL(CP(I2C3_SCL),		(IEN  | PTU | EN  | M0)) /*I2C3_SCL*/\
 	MUX_VAL(CP(I2C3_SDA),		(IEN  | PTU | EN  | M0)) /*I2C3_SDA*/\
 	MUX_VAL(CP(I2C4_SCL),		(IEN  | PTU | EN  | M0)) /*I2C4_SCL*/\
 	MUX_VAL(CP(I2C4_SDA),		(IEN  | PTU | EN  | M0)) /*I2C4_SDA*/\
-	MUX_VAL(CP(HDQ_SIO),			(IDIS | PTU | EN  | M4)) /*GPIO_170*/\
-	MUX_VAL(CP(MCSPI1_CLK),		(IEN  | PTU | EN  | M4)) /*GPIO_171*/\
-	MUX_VAL(CP(MCSPI1_SIMO),		(IEN  | PTU | EN  | M4)) /*GPIO_172*/\
-	MUX_VAL(CP(MCSPI1_SOMI),		(IEN  | PTU | EN  | M4)) /*GPIO_173*/\
+	MUX_VAL(CP(HDQ_SIO),			(IEN  | PTU | EN  | M0)) /*HDQ_SIO*/\
+	MUX_VAL(CP(MCSPI1_CLK),		(IEN  | PTD | DIS | M0)) /*McSPI1_CLK*/\
+	MUX_VAL(CP(MCSPI1_SIMO),		(IEN  | PTD | DIS | M0)) /*McSPI1_SIMO  */\
+	MUX_VAL(CP(MCSPI1_SOMI),		(IEN  | PTD | DIS | M0)) /*McSPI1_SOMI  */\
 	MUX_VAL(CP(MCSPI1_CS0),		(IEN  | PTD | EN  | M0)) /*McSPI1_CS0*/\
-	MUX_VAL(CP(MCSPI1_CS1),		(IDIS | PTD | EN  | M0)) /*McSPI1_CS1*/\
-	MUX_VAL(CP(MCSPI1_CS2),		(IDIS | PTD | DIS | M4)) /*GPIO_176*/\
+	MUX_VAL(CP(MCSPI1_CS1),		(IEN  | PTD | EN  | M0)) /*McSPI1_CS1*/\
+	MUX_VAL(CP(MCSPI1_CS2),		(IEN  | PTD | EN  | M0)) /*McSPI1_CS2*/\
  /* USB EHCI (port 2) */\
 	MUX_VAL(CP(MCSPI1_CS3),		(IEN  | PTU | DIS | M3)) /*HSUSB2_DATA2*/\
 	MUX_VAL(CP(MCSPI2_CLK),		(IEN  | PTU | DIS | M3)) /*HSUSB2_DATA7*/\
@@ -302,6 +302,7 @@ const omap3_sysinfo sysinfo = {
 	MUX_VAL(CP(CSI2_DX0),		(IEN  | PTU | EN  | M4)) /*GPIO_112 - WLAN_IRQ*/\
 	MUX_VAL(CP(ETK_D2),			(IDIS | PTD | DIS | M4)) /*GPIO_16 - WLAN_EN*/\
 	MUX_VAL(CP(ETK_D1),			(IDIS | PTD | DIS | M4)) /*GPIO_15 - BT_EN*/\
+	MUX_VAL(CP(GPMC_A1),			(IDIS | PTD | DIS | M4)) /*GPIO_34 - FM_EN*/\
  /* LCM */ \
 	MUX_VAL(CP(MCBSP1_CLKR),		(IEN  | PTU | DIS | M1)) /*McSPI4_CLK*/\
 	MUX_VAL(CP(MCBSP1_FSR),		(IDIS | PTU | EN  | M4)) /*GPIO_157*/\
