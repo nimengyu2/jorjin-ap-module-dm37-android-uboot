@@ -54,10 +54,9 @@ u32 is_mem_sdr(void)
 
 /*
  * make_cs1_contiguous -
- *  - For es2 and above remap cs1 behind cs0 to allow command line
- *    mem=xyz use all memory with out discontinuous support compiled in.
- *    Could do it at the ATAG, but there really is two banks...
- *  - Called as part of 2nd phase DDR init.
+ * - When we have CS1 populated we want to have it mapped after cs0 to allow
+ *   command line mem=xyz use all memory with out discontinuous support
+ *   compiled in.  We could do it in the ATAG, but there really is two banks...
  */
 void make_cs1_contiguous(void)
 {
@@ -176,24 +175,27 @@ int dram_init(void)
 
 	size0 = get_sdr_cs_size(CS0);
 	/*
-	 * If a second bank of DDR is attached to CS1 this is
-	 * where it can be started.  Early init code will init
-	 * memory on CS0.
+	 * We always need to have cs_cfg point at where the second
+        * bank would be, if present.  Failure to do so can lead to
+        * strange situations where memory isn't detected and
+        * configured correctly.  CS0 will already have been setup
+        * at this point.
 	 */
-	if ((sysinfo.mtype == DDR_COMBO) || (sysinfo.mtype == DDR_STACKED)) {
-		do_sdrc_init(CS1, NOT_EARLY);
-		make_cs1_contiguous();
-
-#ifdef CONFIG_OMAP3_PANTHER
-		// Jack_20110829: Force CS1 to have the same mcfg value as CS0
-		// Caution:
-		//	This is a temporary solution for the incorrect memory size issue of Pantherboard.
-		//	It has not been fully tested. If you have any problem in booting, please remove the following code.
-		writel(readl(&sdrc_base->cs[CS0].mcfg), &sdrc_base->cs[CS1].mcfg);
+	make_cs1_contiguous();
+#ifndef CONFIG_OMAP3_PANTHER
+	// Jack_20111108: Disable CS1's initialization.
+	/* 
+	 * According to "<ROWBOAT>/x-loader/board/omap3evm/omap3evm.c". The initialization of CS1 has been done in function "config_3430sdram_ddr()".
+	 * These two initializations(config_3430sdram_ddr() & dram_init()) are basically the same except for the parameters of SDRC. However, in x-loader,
+	 * these parameters are specified respectively by each board. But in u-boot, they aren't. That means if we run this code in u-boot, it might configurate 		 * SDRC with inappropriate settings. To fix this issue, I've duplicated omap3evm's process into "panther.c". Then disable function "do_sdrc_init()"
+	 * to avoid parameters overwritting.
+	 *
+	 * Also, there is a patch for omap3's SDRC size issue, but it won't work for pantherboard. Please refer to 
+	 * http://www.mail-archive.com/u-boot@lists.denx.de/msg68395.html if interested.
+	 */
+	do_sdrc_init(CS1, NOT_EARLY);
 #endif
-
-		size1 = get_sdr_cs_size(CS1);
-	}
+	size1 = get_sdr_cs_size(CS1);
 
 	gd->bd->bi_dram[0].start = PHYS_SDRAM_1;
 	gd->bd->bi_dram[0].size = size0;
