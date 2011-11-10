@@ -36,7 +36,66 @@
 #include <asm/arch/sys_proto.h>
 #include <asm/arch/gpio.h>
 #include <asm/mach-types.h>
+#include <fastboot.h>
 #include "panther.h"
+
+#ifdef	CONFIG_CMD_FASTBOOT
+#ifdef	FASTBOOT_PORT_OMAPZOOM_NAND_FLASHING
+/* Initialize the name of fastboot flash name mappings */
+fastboot_ptentry ptn[6] = {
+	{
+		.name   = "xloader",
+		.start  = 0x0000000,
+		.length = 0x0020000,
+		/* Written into the first 4 0x20000 blocks
+		   Use HW ECC */
+		.flags  = FASTBOOT_PTENTRY_FLAGS_WRITE_I |
+		          FASTBOOT_PTENTRY_FLAGS_WRITE_HW_ECC |
+			  FASTBOOT_PTENTRY_FLAGS_HW_ECC_LAYOUT_2 |
+			  FASTBOOT_PTENTRY_FLAGS_REPEAT_4,
+	},
+		{
+		.name   = "bootloader",
+		.start  = 0x0080000,
+		.length = 0x01C0000,
+		/* Skip bad blocks on write
+		   Use HW ECC */
+		.flags  = FASTBOOT_PTENTRY_FLAGS_WRITE_I |
+		          FASTBOOT_PTENTRY_FLAGS_WRITE_HW_ECC |
+			  FASTBOOT_PTENTRY_FLAGS_HW_ECC_LAYOUT_2,
+	},
+	{
+		.name   = "environment",
+		.start  = SMNAND_ENV_OFFSET,  /* set in config file */
+		.length = 0x0040000,
+		.flags  = FASTBOOT_PTENTRY_FLAGS_WRITE_HW_ECC |
+			  FASTBOOT_PTENTRY_FLAGS_HW_ECC_LAYOUT_1 |
+			  FASTBOOT_PTENTRY_FLAGS_WRITE_ENV,
+	},
+	{
+		.name   = "boot",
+		/* Test with start close to bad block
+		   The is dependent on the individual board.
+		   Change to what is required */
+		/* .start  = 0x0a00000, */
+			/* The real start */
+		.start  = 0x0280000,
+		.length = 0x0500000,
+		.flags  = FASTBOOT_PTENTRY_FLAGS_WRITE_HW_ECC |
+		          FASTBOOT_PTENTRY_FLAGS_HW_ECC_LAYOUT_1 |
+			  FASTBOOT_PTENTRY_FLAGS_WRITE_I,
+	},
+	{
+		.name   = "system",
+		.start  = 0x00780000,
+		.length = 0x1F880000,
+		.flags  = FASTBOOT_PTENTRY_FLAGS_WRITE_HW_ECC |
+		          FASTBOOT_PTENTRY_FLAGS_HW_ECC_LAYOUT_1 |
+			  FASTBOOT_PTENTRY_FLAGS_WRITE_I,
+	},
+};
+#endif /* FASTBOOT_PORT_OMAPZOOM_NAND_FLASHING */
+#endif /* CONFIG_FASTBOOT */
 
 /*
  * Routine: board_init
@@ -51,6 +110,15 @@ int board_init(void)
 	gd->bd->bi_arch_number = MACH_TYPE_PANTHER;
 	/* boot param addr */
 	gd->bd->bi_boot_params = (OMAP34XX_SDRC_CS0 + 0x100);
+
+#ifdef	CONFIG_CMD_FASTBOOT
+#ifdef	FASTBOOT_PORT_OMAPZOOM_NAND_FLASHING
+	int i;
+
+	for (i = 0; i < 6; i++)
+		fastboot_flash_add_ptn (&ptn[i]);
+#endif /* FASTBOOT_PORT_OMAPZOOM_NAND_FLASHING */
+#endif /* CONFIG_FASTBOOT */
 
 	return 0;
 }
@@ -72,7 +140,6 @@ int misc_init_r(void)
 {
 	struct gpio *gpio2_base = (struct gpio *)OMAP34XX_GPIO2_BASE;
 	struct gpio *gpio5_base = (struct gpio *)OMAP34XX_GPIO5_BASE;
-	struct gpio *gpio6_base = (struct gpio *)OMAP34XX_GPIO6_BASE;
 
 	t2_t *t2_base = (t2_t *)T2_BASE;
 
@@ -118,20 +185,13 @@ int misc_init_r(void)
 	writel(readl(&t2_base->wkup_ctrl) | GPIO_IO_PWRDNZ, &t2_base->wkup_ctrl);
 
 	/* Configure GPIOs to output */
-	// GPIO_39
-	writel(~(GPIO7), &gpio2_base->oe);
-	// GPIO_183, GPIO_170, GPIO_168, GPIO_162, GPIO_161
-	writel(~(GPIO23 | GPIO10 | GPIO8 | GPIO2 | GPIO1), &gpio6_base->oe);
-	// GPIO_159, GPIO_158, GPIO_157, GPIO_156, GPIO_150, GPIO_149, GPIO_143, GPIO_142, GPIO_141, GPIO_140
-	writel(~(GPIO31 | GPIO30 | GPIO29 | GPIO28 | GPIO22 | GPIO21 |
-		GPIO15 | GPIO14 | GPIO13 | GPIO12), &gpio5_base->oe);
+	writel(~(GPIO8 | GPIO7), &gpio2_base->oe);
+	writel(~(GPIO1), &gpio5_base->oe);
 
 	/* Set GPIOs */
-	writel(GPIO7, &gpio2_base->setdataout); // set GPIO_39(P8 USB HUB nreset) to high voltage
-	writel(GPIO23 | GPIO10 | GPIO8 | GPIO2 | GPIO1,
-		&gpio6_base->setdataout);
-	writel(GPIO31 | GPIO30 | GPIO29 | GPIO28 | GPIO22 | GPIO21 |
-		GPIO15 | GPIO14 | GPIO13 | GPIO12, &gpio5_base->setdataout);
+	writel(GPIO8, &gpio2_base->cleardataout);	// set GPIO_40(USB HUB reset) to low
+	writel(GPIO7, &gpio2_base->setdataout);	// set GPIO_39(P8 USB HUB nreset) to high
+	writel(GPIO1, &gpio5_base->setdataout);	// set GPIO_129(DVI enable) to high
 
 	dieid_num_r();
 

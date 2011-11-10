@@ -41,8 +41,11 @@
 
 #define CONFIG_SDRC	/* The chip has SDRC controller */
 
-#include <asm/arch/cpu.h>		/* get chip and board defs */
+#define	CONFIG_FASTBOOT /* Android fast boot */
+
+#include <asm/arch/cpu.h>	/* get chip and board defs */
 #include <asm/arch/omap3.h>
+#include <asm/sizes.h>
 
 /*
  * Display CPU and Board information
@@ -109,8 +112,8 @@
  * Enable CONFIG_MUSB_UDC for Device functionalities.
  */
 #define CONFIG_USB_OMAP3		1
-#define CONFIG_MUSB_HCD			1
-/* #define CONFIG_MUSB_UDC		1 */
+/* #define CONFIG_MUSB_HCD			1 */
+#define CONFIG_MUSB_UDC		1
 #define CONFIG_TWL4030_USB		1
 
 #ifdef CONFIG_USB_OMAP3
@@ -130,10 +133,28 @@
 #endif /* CONFIG_MUSB_HCD */
 
 #ifdef CONFIG_MUSB_UDC
+#ifdef	CONFIG_FASTBOOT
+/* Fastboot settings
+ */
+/* Another macro may also be used or instead used to take care of the case
+ * where fastboot is started at boot (to be incorporated) based on key press
+ */
+#define	CONFIG_CMD_FASTBOOT
+#define	CONFIG_FASTBOOT_TRANSFER_BUFFER		(PHYS_SDRAM_1 + SZ_16M)
+#define	CONFIG_FASTBOOT_TRANSFER_BUFFER_SIZE	(SZ_128M - SZ_16M)
+/* if already present, use already existing NAND macros for block & oob size */
+#define	FASTBOOT_NAND_BLOCK_SIZE		2048
+#define	FASTBOOT_NAND_OOB_SIZE			64
+/* Fastboot product name */
+#define	FASTBOOT_PRODUCT_NAME	"pantherboard"
+/* Use HS */
+#define	USB_BCD_VERSION			0x0200
+#else
 /* USB device configuration */
-#define CONFIG_USB_DEVICE		1
 #define CONFIG_USB_TTY			1
 #define CONFIG_SYS_CONSOLE_IS_IN_ENV	1
+#endif /* CONFIG_FASTBOOT */
+#define CONFIG_USB_DEVICE		1
 /* Change these to suit your needs */
 #define CONFIG_USBD_VENDORID		0x0451
 #define CONFIG_USBD_PRODUCTID		0x5678
@@ -208,14 +229,13 @@
 
 /* Environment information */
 #define CONFIG_BOOTDELAY		3
-
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"loadaddr=0x82000000\0" \
 	"usbtty=cdc_acm\0" \
 	"console=ttyO2,115200n8\0" \
-	"mpurate=500\0" \
-	"vram=12M\0" \
-	"dvimode=1024x768MR-16@60\0" \
+	"mpurate=1000\0" \
+	"vram=8M\0" \
+	"dvimode=800x480MR-16@60\0" \
 	"defaultdisplay=dvi\0" \
 	"mmcroot=/dev/mmcblk0p2 rw\0" \
 	"mmcrootfstype=ext3 rootwait\0" \
