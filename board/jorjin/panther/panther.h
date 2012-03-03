@@ -305,7 +305,7 @@ const omap3_sysinfo sysinfo = {
 	MUX_VAL(CP(GPMC_A1),			(IDIS | PTD | DIS | M4)) /*GPIO_34 - FM_EN*/\
  /* LCM */ \
 	MUX_VAL(CP(MCBSP1_CLKR),		(IEN  | PTU | DIS | M1)) /*McSPI4_CLK*/\
-	MUX_VAL(CP(MCBSP1_FSR),		(IDIS | PTU | EN  | M4)) /*GPIO_157*/\
+	MUX_VAL(CP(MCBSP1_FSR),		(IEN  | PTU | EN  | M4)) /*GPIO_157*/\
 	MUX_VAL(CP(MCBSP1_DX),		(IDIS | PTU | DIS | M1)) /*McSPI4_SIMO*/\
 	MUX_VAL(CP(MCBSP1_DR),		(IEN  | PTU | EN  | M1)) /*McSPI4_SOMI*/\
 	MUX_VAL(CP(MCBSP1_FSX),		(IDIS | PTD | DIS | M1)) /*McSPI4_CS0*/\
