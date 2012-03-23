@@ -310,6 +310,8 @@ const omap3_sysinfo sysinfo = {
 	MUX_VAL(CP(MCBSP1_DR),		(IEN  | PTU | EN  | M1)) /*McSPI4_SOMI*/\
 	MUX_VAL(CP(MCBSP1_FSX),		(IDIS | PTD | DIS | M1)) /*McSPI4_CS0*/\
 	MUX_VAL(CP(MCBSP1_CLKX),		(IDIS | PTD | DIS | M4)) /*GPIO_162*/\
+ /* PCI-E */\
+	MUX_VAL(CP(GPMC_A9),			(IDIS | PTD | EN  | M4)) /*GPIO_42*/\
  /* Buttons */\
 	MUX_VAL(CP(GPMC_A4),			(IEN  | PTU | EN  | M4)) /*GPIO_37*/\
 	MUX_VAL(CP(GPMC_A5),			(IEN  | PTU | EN  | M4)) /*GPIO_38*/\
