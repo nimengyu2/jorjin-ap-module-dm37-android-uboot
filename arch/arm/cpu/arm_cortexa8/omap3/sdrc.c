@@ -185,12 +185,8 @@ int dram_init(void)
 	 * memory on CS0.
 	 */
 	if ((sysinfo.mtype == DDR_COMBO) || (sysinfo.mtype == DDR_STACKED)) {
-#ifdef CONFIG_OMAP3_PANTHER
-		// Since we have done all the SDRC configurations in x-loader, we don't want to re-write them again in u-boot.
-#else
-		do_sdrc_init(CS1, NOT_EARLY);
+
 		make_cs1_contiguous();
-#endif
 
 		size1 = get_sdr_cs_size(CS1);
 	}
