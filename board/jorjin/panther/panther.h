@@ -319,5 +319,11 @@ const omap3_sysinfo sysinfo = {
 	MUX_VAL(CP(GPMC_A7),			(IDIS | PTD | EN  | M4)) /*GPIO_40 - USB HUB reset*/\
 	MUX_VAL(CP(GPMC_A6),			(IDIS | PTU | EN  | M4)) /*GPIO_39 - P8 USB HUB nreset*/\
  /* DVI */\
-	MUX_VAL(CP(GPIO_129),		(IDIS | PTU | EN  | M4)) /*GPIO_129 - DVI enable*/
+	MUX_VAL(CP(GPIO_129),		(IDIS | PTU | EN  | M4)) /*GPIO_129 - DVI enable*/\
+/* hood add for debug */\
+	MUX_VAL(CP(ETK_CTL_ES2),		(IDIS | PTU | EN  | M4)) /*GPIO_13 - USB PHY EN*/\
+	MUX_VAL(CP(ETK_D6_ES2),			(IDIS | PTU | EN  | M4)) /*GPIO_20 - USB HUB EN*/\
+	MUX_VAL(CP(ETK_D5_ES2),			(IDIS | PTD | EN  | M4)) /*GPIO_19 - USB HUB reset*/\
+	MUX_VAL(CP(ETK_D4_ES2),			(IDIS | PTU | EN  | M4)) /*GPIO_18 - USB HUB nreset*/
+	
 #endif

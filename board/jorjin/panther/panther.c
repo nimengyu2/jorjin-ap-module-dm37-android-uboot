@@ -138,6 +138,7 @@ typedef struct t2 {
  */
 int misc_init_r(void)
 {
+	struct gpio *gpio1_base = (struct gpio *)OMAP34XX_GPIO1_BASE;
 	struct gpio *gpio2_base = (struct gpio *)OMAP34XX_GPIO2_BASE;
 	struct gpio *gpio5_base = (struct gpio *)OMAP34XX_GPIO5_BASE;
 
@@ -149,17 +150,13 @@ int misc_init_r(void)
 	*(ulong *)(CONTROL_PROG_IO1) &= ~(PRG_I2C2_PULLUPRESX);
 
 	twl4030_power_init();
-	/* Set VAUX3 to 1.5V, VAUX4 to 1.8V */
-	twl4030_pmrecv_vsel_cfg(TWL4030_PM_RECEIVER_VAUX3_DEDICATED,
-				TWL4030_PM_RECEIVER_VAUX3_VSEL_15,
-				TWL4030_PM_RECEIVER_VAUX3_DEV_GRP,
-				0x00);
-	twl4030_i2c_write_u8(TWL4030_CHIP_PM_RECEIVER, TWL4030_PM_RECEIVER_VAUX4_VSEL_18, TWL4030_PM_RECEIVER_VAUX4_DEDICATED);
+
 	twl4030_led_init(TWL4030_LED_LEDEN_LEDAON | TWL4030_LED_LEDEN_LEDBON);
 	/* Turn on LEDA */
 	twl4030_i2c_write_u8(TWL4030_CHIP_PWMA, 0x7F, TWL4030_BASEADD_PWMA);
 	twl4030_i2c_write_u8(TWL4030_CHIP_PWMA, 0x7F, TWL4030_BASEADD_PWMA+1);
 	twl4030_led_init(TWL4030_LED_LEDEN_LEDBON);
+
 
 	printf("Panther Rev A\n");
 	/* Set VAUX2 to 1.8V for EHCI PHY */
@@ -188,10 +185,62 @@ int misc_init_r(void)
 	writel(~(GPIO8 | GPIO7), &gpio2_base->oe);
 	writel(~(GPIO1), &gpio5_base->oe);
 
+	writel(~(GPIO4 | GPIO3 | GPIO2), &gpio1_base->oe);
+
+	/*add meikee for debug */
+	writel(~(GPIO3), &gpio2_base->oe);
+
 	/* Set GPIOs */
+	/*    add meikee for debug
 	writel(GPIO8, &gpio2_base->cleardataout);	// set GPIO_40(USB HUB reset) to low
 	writel(GPIO7, &gpio2_base->setdataout);	// set GPIO_39(P8 USB HUB nreset) to high
+	*/
+
+	/*add meikee for debug */	
+	writel(GPIO3, &gpio2_base->cleardataout);
+	
+	
+	/*  add meikee for debug  */
+	/* USB PHY 3.3v enable */
+	//writel(GPIO13, &gpio0_base->setdataout);
+	
+	/*omap_request_gpio(13);
+	omap_set_gpio_direction(13, 0);
+	omap_set_gpio_dataout(13, 1);	*/
+	
+	/* USB HUB host 5v enable */
+	//writel(GPIO4, &gpio1_base->setdataout);
+	/* USB HUB reset, H active */
+	//writel(GPIO3, &gpio1_base->cleardataout);
+	/* USB HS PHY nreset, L active */
+	//writel(GPIO2, &gpio1_base->setdataout);
+	
+		
+	
 	writel(GPIO1, &gpio5_base->setdataout);	// set GPIO_129(DVI enable) to high
+
+	/* hood add for debug */
+	/* USB PHY 3.3v enable */
+	/*omap_request_gpio(13);
+	omap_set_gpio_direction(13, 0);
+	omap_set_gpio_dataout(13, 1);*/
+
+	/* USB HUB host 5v enable */
+	/*omap_request_gpio(20);
+	omap_set_gpio_direction(20, 0);
+	omap_set_gpio_dataout(20, 1);*/
+
+
+	/* USB HUB reset, H active */
+	/*omap_request_gpio(19);
+	omap_set_gpio_direction(19, 0);
+	omap_set_gpio_dataout(19, 0);*/
+
+	/* USB HS PHY nreset, L active */
+	/*omap_request_gpio(18);
+	omap_set_gpio_direction(18, 0);
+	omap_set_gpio_dataout(18, 1);*/
+	/* hood add end */
 
 	dieid_num_r();
 
